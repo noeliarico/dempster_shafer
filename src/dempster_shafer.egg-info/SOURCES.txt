@@ -1,0 +1,10 @@
+LICENSE
+README.md
+pyproject.toml
+setup.cfg
+setup.py
+src/dempster_shafer/__init__.py
+src/dempster_shafer.egg-info/PKG-INFO
+src/dempster_shafer.egg-info/SOURCES.txt
+src/dempster_shafer.egg-info/dependency_links.txt
+src/dempster_shafer.egg-info/top_level.txt

@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: dempster-shafer
+Version: 0.0.1
+Summary: Tools for Dempster-Shafer theory of evidence computation
+Home-page: https://github.com/noeliarico/dempster_shafer
+Author: Noelia Rico, Luigi Troiano
+Author-email: noeliarico@uniovi.es
+License: UNKNOWN
+Project-URL: Bug Tracker, https://github.com/noeliarico/dempster_shafer/issues
+Description: # Dempster shafer theory
+        
+        Python package
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
