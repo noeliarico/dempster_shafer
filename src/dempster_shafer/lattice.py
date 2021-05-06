@@ -1,3 +1,5 @@
+import numpy as np
+
 def the_lattice():
     print("This is the lattice")
     
@@ -26,6 +28,17 @@ class Lattice:
         # TODO: check that all the values are in the set of items
         # TODO: What happens is items have length greater than one?
         
+    def get_subset(self, index):
+            
+        # convert number into string of the binary representation
+        binary = bin(index) 
+        binary = binary[2:] # remove first two characters which are 0b
+        binary = binary.zfill(len(self.items)) # pad with zeros
+        binary = list(binary) # each element to a position of an array
+        binary = [int(x) for x in binary] # as integers
+        binary = list(np.extract(binary, self.items))
+        binary = ''.join(binary)
+        return(binary)
         
     def __repr__(self):
         return "Lattice for the items".format(self.items)
