@@ -7,7 +7,9 @@
 
 """
 
+from .fod import FrameOfDiscernment
 from .lattice import Lattice
+
 
 def hello():
     """This is an example function...
