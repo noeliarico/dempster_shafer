@@ -1,47 +1,63 @@
 import numpy as np
-
-def the_lattice():
-    print("This is the lattice")
     
 class Lattice:
     
-    def __init__(self, items):
-        self.items = items
-        print("Lattice created for {}".format(items))
+    def __init__(self, fod, fs = None):
+        """Lattice
         
-    def get_index(self, subset):
+        The lattice has a frame of discernment associated
+
+        :param lattice: [description]
+        :type lattice: [type]
+        """
+        self.fod = fod
         
-        if not type(subset) is str:
-            raise ValueError("ValueError: subset must be an string")
+        # TODO check that ds is associated with the same fod object
+        self.fs = fs
         
-        # check if all the elements of the subset are 
-        binary_repr = ''
-        for i in range(len(self.items)):
-            if subset.find(self.items[i]) == -1:
-                binary_repr+='0'
-            else:
-                binary_repr+='1'
-                
-        return(int(binary_repr, base=2))
+        print("Lattice created for the frame of discerment {}".format(fod.items))
         
-        # TODO: check the values are unique
-        # TODO: check that all the values are in the set of items
-        # TODO: What happens is items have length greater than one?
+    def bel(self, element='all'):
+        """Compute the belief using the set of focal elements associated with 
+        the lattice.
+
+        :return: The belief
+        :rtype: np.array
+        """
         
-    def get_subset(self, index):
+        if self.fs == None:
+            raise ValueError("A focal set must be added to the latice before computing the belief.")
+        
+        if self.b != None:
+            return self.b
+        else:
+            # compute the belief
+            return self.b
+        
+        # TODO check if element if a string or a index
+        # if it is a index (int) then it is necessary to check that the value
+        # is lower then the number of subsets for n elements (2**n)
+        # and retrieve the value for the array
+        # if the element is a string...
+        # if it is all, as default, return all the beliefs
+        # if it is positive, return the ones that have a value greater than 0
+        # if it is any other value, ensure that it is a subset
+    
+    def pl(self, element='all'):
+        """Compute the plausability using the set of focal elements associated
+        with the lattice.
+
+        :return: [description]
+        :rtype: [type]
+        """
+        
+        if self.b != None:
+            # sing the property Pl(A) = 1 - ~Bel(A)
+            return np.flip(self.b)
+        else:
+            self.bel()
             
-        # convert number into string of the binary representation
-        binary = bin(index) 
-        binary = binary[2:] # remove first two characters which are 0b
-        binary = binary.zfill(len(self.items)) # pad with zeros
-        binary = list(binary) # each element to a position of an array
-        binary = [int(x) for x in binary] # as integers
-        binary = list(np.extract(binary, self.items))
-        binary = ''.join(binary)
-        return(binary)
-        
-    def __repr__(self):
-        return "Lattice for the items".format(self.items)
+        return(0)
     
     def __str__(self):
-        return "Lattice for the items".format(self.items)
+        return "Lattice for the frame of discerment".format(self.lattice.items)
