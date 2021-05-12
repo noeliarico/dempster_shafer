@@ -8,8 +8,10 @@
 
 """
 
+import numpy as np
+
 class FrameOfDiscernment:
-    """We use this as a public class example class.
+    """Frame of discernment for a set of items.
 
     You never call this class before calling :func:`public_fn_with_sphinxy_docstring`.
 
@@ -19,35 +21,33 @@ class FrameOfDiscernment:
 
     """
     
-    # all the strings for identifying the elements have length=1       
+    # if True, all the strings for identifying the elements have length=1       
     __length1 = True
     
     def __init__(self, items):
-        """A really simple class.
+        """Crate a FrameOfDiscernment for a set of items given as paramenter
 
-        Args:
-            foo (str): We all know what foo does.
-
-        Kwargs:
-            bar (str): Really, same as foo.
-
+        :param items: List containing the strings with the names of the items
+            represented in the frame of discernment
+        :type items: list, np.array
         """
         
         self.items = items
-        print("Lattice created for {}".format(items))
         
     def get_index(self, subset):
         """Get the index of a subset 
 
-        Given an interger number
-
-        >>> get_index('abdc')
-        30
-
-        In the elements of the frame of discernmnet have length one
+        Given an interger number as parameter, return the subset of the frame 
+        of discernment associated with that integer.
         
-        If the elements of the frame of discernmnet have length one
+        If the elements of the frame of discernmnet have length one...
 
+        >>> fod = ds.FrameOfDiscernment(['a', 'b', 'c', 'd'])
+        >>> get_index('ad')
+        9
+        
+        If at least one of the elements of the frame of discernmnet have 
+        length greater one...
         """
         
         if not type(subset) is str:
@@ -68,6 +68,13 @@ class FrameOfDiscernment:
         # TODO: What happens is items have length greater than one?
         
     def get_subset(self, index):
+        """Returns the subset corresponding to an index  given as paramenter
+
+        :param index: Index of the subset that is going to be retrieved
+        :type index: int
+        :return: Subset corresponding to the index given as parameter
+        :rtype: string
+        """
             
         # convert number into string of the binary representation
         binary = bin(index) 
@@ -75,12 +82,32 @@ class FrameOfDiscernment:
         binary = binary.zfill(len(self.items)) # pad with zeros
         binary = list(binary) # each element to a position of an array
         binary = [int(x) for x in binary] # as integers
-        binary = list(np.extract(binary, self.items))
-        binary = ''.join(binary)
+        binary = list(np.extract(binary, self.items)) # take the names
+        binary = ''.join(binary) # create the string representation
         return(binary)
-        
-    def __repr__(self):
-        return "Lattice for the items".format(self.items)
     
+    def is_subset(self, subset):
+        """Check if subset is subset of the elements in the frame of discernment
+
+        :param subset: [description]
+        :type subset: [type]
+        """
+        
+        #TODO it depends on the length of the alternatives
+        
+        for i in range(len(self.items)):
+            if subset.find(self.items[i]) == -1:
+                return False
+        
+        return True
+    
+        
+    def print_all(self):
+        """Print all the subsets of the frame of discernment as well as their
+        associated integer index. 
+        """
+        for i in range(2**len(self.items)):
+            print("{} \t - \t {}".format(i, self.get_subset(i)))
+        
     def __str__(self):
-        return "Lattice for the items".format(self.items)
+        return "Frame of discernment for the set of items".format(self.items)
