@@ -51,19 +51,129 @@
 <div class="section" id="frame-of-discernment">
 <h1>Frame Of Discernment<a class="headerlink" href="#frame-of-discernment" title="Permalink to this headline">¶</a></h1>
 <p>This is something I want to say that is not in the docstring.</p>
-<span class="target" id="module-dempster_shafer.fod"></span><dl class="py class">
-<dt id="dempster_shafer.fod.FrameOfDiscernment">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dempster_shafer.fod.</span></code><code class="sig-name descname"><span class="pre">FrameOfDiscernment</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.fod.FrameOfDiscernment" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="py class">
+<dt id="dempster_shafer.FrameOfDiscernment">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dempster_shafer.</span></code><code class="sig-name descname"><span class="pre">FrameOfDiscernment</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FrameOfDiscernment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Frame of discernment for a set of items.</p>
+<p>You never call this class before calling <code class="xref py py-func docutils literal notranslate"><span class="pre">public_fn_with_sphinxy_docstring()</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An example of intersphinx is this: you <strong>cannot</strong> use <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> on this class.</p>
+</div>
+<dl class="py method">
+<dt id="dempster_shafer.FrameOfDiscernment.get_index">
+<code class="sig-name descname"><span class="pre">get_index</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FrameOfDiscernment.get_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the index of a subset</p>
+<p>Given an interger number as parameter, return the subset of the frame 
+of discernment associated with that integer.</p>
+<p>If the elements of the frame of discernmnet have length one…</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fod</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">FrameOfDiscernment</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_index</span><span class="p">(</span><span class="s1">&#39;ad&#39;</span><span class="p">)</span>
+<span class="go">9</span>
+</pre></div>
+</div>
+<p>If at least one of the elements of the frame of discernmnet have 
+length greater one…</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dempster_shafer.FrameOfDiscernment.get_subset">
+<code class="sig-name descname"><span class="pre">get_subset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FrameOfDiscernment.get_subset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the subset corresponding to an index  given as paramenter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – Index of the subset that is going to be retrieved</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Subset corresponding to the index given as parameter</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dempster_shafer.FrameOfDiscernment.is_subset">
+<code class="sig-name descname"><span class="pre">is_subset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FrameOfDiscernment.is_subset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if subset is subset of the elements in the frame of discernment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>subset</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dempster_shafer.FrameOfDiscernment.print_all">
+<code class="sig-name descname"><span class="pre">print_all</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FrameOfDiscernment.print_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print all the subsets of the frame of discernment as well as their
+associated integer index.</p>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 <div class="section" id="focal-set">
 <h1>Focal Set<a class="headerlink" href="#focal-set" title="Permalink to this headline">¶</a></h1>
 <p>Doc about the focal set</p>
+<dl class="py class">
+<dt id="dempster_shafer.FocalSet">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dempster_shafer.</span></code><code class="sig-name descname"><span class="pre">FocalSet</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpa</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FocalSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for representing the focal sets associated to a Frame of Discerment</p>
+</dd></dl>
+
 </div>
 <div class="section" id="lattice">
 <h1>Lattice<a class="headerlink" href="#lattice" title="Permalink to this headline">¶</a></h1>
-<p>Doc about the lattice</p>
+<p>Allows operation over the frame of discernment</p>
+<dl class="py class">
+<dt id="dempster_shafer.Lattice">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dempster_shafer.</span></code><code class="sig-name descname"><span class="pre">Lattice</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.Lattice" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="dempster_shafer.Lattice.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.Lattice.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lattice</p>
+<p>The lattice has a frame of discernment associated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lattice</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dempster_shafer.Lattice.bel">
+<code class="sig-name descname"><span class="pre">bel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.Lattice.bel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the belief using the set of focal elements associated with 
+the lattice.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The belief</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dempster_shafer.Lattice.pl">
+<code class="sig-name descname"><span class="pre">pl</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.Lattice.pl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the plausability using the set of focal elements associated
+with the lattice.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[description]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

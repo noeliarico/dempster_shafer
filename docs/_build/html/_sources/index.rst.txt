@@ -32,17 +32,20 @@ Frame Of Discernment
 
 This is something I want to say that is not in the docstring.
 
-.. automodule:: dempster_shafer.fod
-
 .. autoclass:: FrameOfDiscernment
-   :members: get_index
+   :members: is_subset, get_index, get_subset, print_all
 
 Focal Set
 =========
 
 Doc about the focal set
 
+.. autoclass:: FocalSet
+
 Lattice
 =======
 
-Doc about the lattice
+Allows operation over the frame of discernment
+
+.. autoclass:: Lattice
+   :members: __init__, bel, pl
