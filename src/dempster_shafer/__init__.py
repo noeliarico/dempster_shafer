@@ -8,7 +8,7 @@
 from .fod import FrameOfDiscernment
 from .fs import FocalSet
 from .lattice import Lattice
-
+from .prueba import Prueba
 
 def hello():
     """This is an example function...
