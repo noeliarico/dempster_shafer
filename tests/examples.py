@@ -15,6 +15,9 @@ fs1 = ds.FocalSet(fod1,
 print(fod1.is_subset('abd'))
 print(fod1.is_subset('aed'))
 
+lat = ds.Lattice(fod1, fs1)
+lat.bel()
+
 # fod2 = ds.FrameOfDiscernment(['a', 'b', 'c', 'd', 'e', 'f'])
 # fod2.print_all()
 

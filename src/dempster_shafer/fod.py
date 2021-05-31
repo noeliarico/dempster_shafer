@@ -12,23 +12,21 @@ import numpy as np
 
 class FrameOfDiscernment:
     """Frame of discernment for a set of items.
-
-    You never call this class before calling :func:`public_fn_with_sphinxy_docstring`.
-
-    .. note::
-
-       An example of intersphinx is this: you **cannot** use :mod:`pickle` on this class.
-
+    
+    This class allows to create a set of items to be used later with the 
+    classes FocalSet and Lattice.
+    
     """
     
     # if True, all the strings for identifying the elements have length=1       
     __length1 = True
     
     def __init__(self, items):
-        """Crate a FrameOfDiscernment for a set of items given as paramenter
+        """Crate a FrameOfDiscernment object for the set of items that is given 
+        as paramenter.
 
         :param items: List containing the strings with the names of the items
-            represented in the frame of discernment
+            represented in the frame of discernment.
         :type items: list, np.array
         """
         
@@ -48,12 +46,16 @@ class FrameOfDiscernment:
         
         If at least one of the elements of the frame of discernmnet have 
         length greater one...
+        
+        >>> fod = ds.FrameOfDiscernment(['item1', 'item2', 'item3'])
+        >>> get_index('item1;item2')
+        
         """
         
         if not type(subset) is str:
             raise ValueError("ValueError: subset must be an string")
         
-        # check if all the elements of the subset are 
+        # check if all the elements of the subset are item of the FoD
         binary_repr = ''
         for i in range(len(self.items)):
             if subset.find(self.items[i]) == -1:
@@ -86,6 +88,8 @@ class FrameOfDiscernment:
         binary = ''.join(binary) # create the string representation
         return(binary)
     
+        # TODO for longer elements
+    
     def is_subset(self, subset):
         """Check if subset is subset of the elements in the frame of discernment
 
@@ -93,14 +97,20 @@ class FrameOfDiscernment:
         :type subset: [type]
         """
         
-        #TODO it depends on the length of the alternatives
+        if self.__length1:
+            # check for all the items if they exist
+            for i in range(len(self.items)):
+                # find each element as a subset of the set of items
+                # function find returns -1 when the number 
+                if subset.find(self.items[i]) == -1:
+                    return False
+            return True
         
-        for i in range(len(self.items)):
-            if subset.find(self.items[i]) == -1:
-                return False
-        
-        return True
-    
+        # at least one of the strings representing the items is longer 
+        # than one and therefore a separator is needed
+        else:
+            return True
+            
         
     def print_all(self):
         """Print all the subsets of the frame of discernment as well as their
@@ -108,6 +118,7 @@ class FrameOfDiscernment:
         """
         for i in range(2**len(self.items)):
             print("{} \t - \t {}".format(i, self.get_subset(i)))
+    
         
     def __str__(self):
         return "Frame of discernment for the set of items".format(self.items)

@@ -5,13 +5,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to dempster_shafer’s documentation! &#8212; dempster_shafer  documentation</title>
+    <title>Dempster_shafer’s package documentation &#8212; dempster_shafer  documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -30,11 +31,35 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-dempster-shafer-s-documentation">
-<h1>Welcome to dempster_shafer’s documentation!<a class="headerlink" href="#welcome-to-dempster-shafer-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>The aim of this package is to blah blah blah</p>
+  <div class="section" id="dempster-shafer-s-package-documentation">
+<h1>Dempster_shafer’s package documentation<a class="headerlink" href="#dempster-shafer-s-package-documentation" title="Permalink to this headline">¶</a></h1>
+<p>The aim of this package is to provide a tool for performing Dempster-Shafer
+operations in large set of items by means of a native GPU implementation</p>
 <div class="toctree-wrapper compound">
 </div>
+<p>items - elements in omega</p>
+<p>The Dempster-Shafer theory of evidence provides an expressive framework for reasoning with uncertainty.</p>
+<p>It includes probability theory as a special case and is able to express imprecise probabilities.</p>
+<p>Given a textit{frame of discernment} <span class="math notranslate nohighlight">\(\Omega\)</span>, which is a set containing <span class="math notranslate nohighlight">\(n\)</span> elements,
+basic probabilities are allocated to its subsets, instead of being allocated to single elements (on the contrary to what happens in the case of probability theory).
+The derived measures of Plausibility and Belief, which determine the probability interval assigned to a subset,
+are calculated from the relationships between that subset and the basic assignment of probabilities on all subsets.</p>
+<p>For any application of this theory, the need to deal with the power set <span class="math notranslate nohighlight">\(2^\Omega\)</span>, i.e., the collection of all potential subsets of a discourse universe, poses significant problems in terms of scalability, being this a problem for the DST computation and consequently its use in real contexts.</p>
+<p>Belief function represents the degree of belief to which the evidence supports
+and plausibility refers to the degree of belief to which a set is feasible.</p>
+<p>A function <span class="math notranslate nohighlight">\(m:2^{\Omega}\longrightarrow [0, 1]\)</span> over <span class="math notranslate nohighlight">\(\Omega\)</span> is called a <em>basic probability assignment</em> iff
+<span class="math notranslate nohighlight">\(m(\emptyset)=0 \;\;\; \textrm{and} \:\; \sum_{S \in 2^\Omega} m(S)=1\)</span></p>
+<p>Any <span class="math notranslate nohighlight">\(S \in 2^\Omega$ is a \textit{focal element} iff $m(S)&gt;0\)</span>.</p>
+<p>A <em>focal set</em> is the collection of focal elements <span class="math notranslate nohighlight">\(F(\Omega)=\{S \subseteq \Omega | m(S)&gt;0\} \subseteq 2^\Omega\)</span>.</p>
+<p>The <em>Belief</em> of <span class="math notranslate nohighlight">\(A \subseteq \Omega\)</span> induced by the basic probability assignment function <span class="math notranslate nohighlight">\(m\)</span> is defined as</p>
+<p><span class="math notranslate nohighlight">\(Bel(A)=\sum_{S\subseteq A} m(S)\)</span></p>
+<p>The <em>Plausibility</em> of <span class="math notranslate nohighlight">\(A \subseteq \Omega\)</span> induced by the basic probability assignment function <em>m</em> is defined as</p>
+<p><span class="math notranslate nohighlight">\(Pl(A)=\sum_{S \cap A \neq \emptyset} m(S)\)</span></p>
+<p>Let <span class="math notranslate nohighlight">\(m_1\)</span> and <span class="math notranslate nohighlight">\(m_2$\)</span> be two basic probability assignments, the <em>joint basic probability assignment</em>, i.e. the Dempster’s combination rule (DCR), is computed as
+<span class="math notranslate nohighlight">\(m_{1,2}(A) = \frac{1}{1-Z} \sum\limits_{B \cap C = A} m_1(B) \cdot m_2(C)\)</span>
+where
+<span class="math notranslate nohighlight">\(Z = \sum\limits_{B \cap C = \emptyset} m_1(B) \cdot m_2(C)\)</span>
+is a measure of <em>conflict</em> between the two basic probability assignment sets. In addition, it is assumed <span class="math notranslate nohighlight">\(m_{1,2}(\emptyset) = 0\)</span>.</p>
 </div>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
@@ -50,7 +75,6 @@
 </div>
 <div class="section" id="frame-of-discernment">
 <h1>Frame Of Discernment<a class="headerlink" href="#frame-of-discernment" title="Permalink to this headline">¶</a></h1>
-<p>This is something I want to say that is not in the docstring.</p>
 <dl class="py class">
 <dt id="dempster_shafer.FrameOfDiscernment">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dempster_shafer.</span></code><code class="sig-name descname"><span class="pre">FrameOfDiscernment</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FrameOfDiscernment" title="Permalink to this definition">¶</a></dt>
@@ -60,6 +84,18 @@
 <p class="admonition-title">Note</p>
 <p>An example of intersphinx is this: you <strong>cannot</strong> use <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> on this class.</p>
 </div>
+<dl class="py method">
+<dt id="dempster_shafer.FrameOfDiscernment.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FrameOfDiscernment.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crate a FrameOfDiscernment for a set of items given as paramenter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>items</strong> (<em>list</em><em>, </em><em>np.array</em>) – List containing the strings with the names of the items
+represented in the frame of discernment</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt id="dempster_shafer.FrameOfDiscernment.get_index">
 <code class="sig-name descname"><span class="pre">get_index</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FrameOfDiscernment.get_index" title="Permalink to this definition">¶</a></dt>
@@ -74,6 +110,10 @@ of discernment associated with that integer.</p>
 </div>
 <p>If at least one of the elements of the frame of discernmnet have 
 length greater one…</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fod</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">FrameOfDiscernment</span><span class="p">([</span><span class="s1">&#39;item1&#39;</span><span class="p">,</span> <span class="s1">&#39;item2&#39;</span><span class="p">,</span> <span class="s1">&#39;item3&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_index</span><span class="p">(</span><span class="s1">&#39;item1;item2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -116,11 +156,46 @@ associated integer index.</p>
 </div>
 <div class="section" id="focal-set">
 <h1>Focal Set<a class="headerlink" href="#focal-set" title="Permalink to this headline">¶</a></h1>
-<p>Doc about the focal set</p>
+<p>The set of focal sets must be associated with a Frame of Discernment.</p>
+<p>The initialization can be done either using the literal names of the items or
+the indexes of the subset.</p>
+<p>For example, given the focal set of items {a,b,c,d} which was initiallize as:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fod</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">FrameOfDiscernment</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>To create the focal set of elements {C, BC, AD}:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fs1</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">FocalSet</span><span class="p">(</span><span class="n">fod1</span><span class="p">,</span>
+   <span class="p">{</span>
+      <span class="s2">&quot;abc&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+      <span class="s2">&quot;abdc&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+      <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">0.3</span>
+   <span class="p">})</span>
+</pre></div>
+</div>
 <dl class="py class">
 <dt id="dempster_shafer.FocalSet">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dempster_shafer.</span></code><code class="sig-name descname"><span class="pre">FocalSet</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpa</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FocalSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class for representing the focal sets associated to a Frame of Discerment</p>
+<dl class="py method">
+<dt id="dempster_shafer.FocalSet.__checkSubsets">
+<code class="sig-name descname"><span class="pre">__checkSubsets</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FocalSet.__checkSubsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that all the subsets belong to the FrameOfDiscernment</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dempster_shafer.FocalSet.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpa</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FocalSet.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Focal set class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fod</strong> (<a class="reference internal" href="#dempster_shafer.FrameOfDiscernment" title="dempster_shafer.FrameOfDiscernment"><em>FrameOfDiscernment</em></a>) – FrameOfDiscernment for which the focal set is defined</p></li>
+<li><p><strong>bpa</strong> (<em>dict</em>) – dictionary associating subset</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>

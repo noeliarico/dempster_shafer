@@ -1,4 +1,6 @@
 import numpy as np
+from numba import cuda
+from numba import jit
     
 class Lattice:
     
@@ -13,10 +15,25 @@ class Lattice:
         self.fod = fod
         
         # TODO check that ds is associated with the same fod object
-        self.fs = fs
+        if fs != None:
+            if fs.fod != fod:
+                raise ValueError('The focal set and this lattice must be associated to the same the frame of discernment' )
+            else:
+                self.fs = fs
+        else:
+            self.fs = None
+        # print("Lattice created for the frame of discerment {}".format(fod.items))
         
-        print("Lattice created for the frame of discerment {}".format(fod.items))
-        
+    def calculation(self):
+        k = self.k
+        return self.complicated([1,2,3],k)
+
+    @staticmethod
+    @jit(nopython=True)                             
+    def complicated(x,k):                                  
+        for a in x:
+            b = a**2 + a**3 + k
+            
     def bel(self, element='all'):
         """Compute the belief using the set of focal elements associated with 
         the lattice.
@@ -26,13 +43,16 @@ class Lattice:
         """
         
         if self.fs == None:
-            raise ValueError("A focal set must be added to the latice before computing the belief.")
+            raise ValueError("A focal set must be added to the lattice before computing the belief.")
         
-        if self.b != None:
-            return self.b
+        if cuda.is_available():
+            if self.b != None:
+                return self.b
+            else:
+                # compute the belief
+                return self.b
         else:
-            # compute the belief
-            return self.b
+            raise ValueError("No GPU available.")
         
         # TODO check if element if a string or a index
         # if it is a index (int) then it is necessary to check that the value
@@ -42,6 +62,25 @@ class Lattice:
         # if it is all, as default, return all the beliefs
         # if it is positive, return the ones that have a value greater than 0
         # if it is any other value, ensure that it is a subset
+        
+        
+#         @cuda.jit
+# def alg1GPU(fs, bpa, be, pl):
+  
+#   iset = cuda.threadIdx.x + cuda.blockIdx.x * cuda.blockDim.x
+#   nfocal = fs.shape[0]
+#   nnodes = be.shape[0]
+
+#   if iset < nnodes:
+#     be[iset] = 0 # gpu does not initialize to zeros so this is necessary
+#     pl[iset] = 0 # gpu does not initialize to zeros so this is necessary
+
+#     for k in range(nfocal):
+#       el = fs[k]
+#       if (iset & el) == el: # belief
+#         be[iset] += bpa[k]
+#       if (iset & el) > 0: # plausibility
+#         pl[iset] += bpa[k]
     
     def pl(self, element='all'):
         """Compute the plausability using the set of focal elements associated
