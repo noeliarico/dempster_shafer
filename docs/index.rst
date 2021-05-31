@@ -89,14 +89,24 @@ For example, given the focal set of items {a,b,c,d} which was initiallize as:
 
 >>> fod = ds.FrameOfDiscernment(['a', 'b', 'c', 'd'])
 
-To create the focal set of elements {C, BC, AD} with basic probability assignments of ::
+To create the focal set of elements {C, BC, AD} with basic probability assignments of 0.5, 0.4 and 0.1
+it is necessary to execute:::
 
-   fs1 = ds.FocalSet(fod1, 
+   fs1 = ds.FocalSet(fod, )
+
+
+
+Another option is to use a dictionary::
+
+   fs1 = ds.FocalSet(fod, 
       {
          "c": 0.5,
          "bc": 0.4,
          "ad": 0.1
       })
+
+
+This can be also done using indexes for the dictionary::
 
 .. autoclass:: FocalSet
    :members: __init__, __checkSubsets, 
