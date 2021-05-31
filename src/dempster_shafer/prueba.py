@@ -1,7 +1,7 @@
 import numpy as np
 from numba import cuda
     
-class Lattice:
+class Prueba:
     
     def __init__(self,n):
         self.n = n
