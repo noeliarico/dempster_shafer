@@ -79,19 +79,17 @@ is a measure of <em>conflict</em> between the two basic probability assignment s
 <dt id="dempster_shafer.FrameOfDiscernment">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dempster_shafer.</span></code><code class="sig-name descname"><span class="pre">FrameOfDiscernment</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FrameOfDiscernment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Frame of discernment for a set of items.</p>
-<p>You never call this class before calling <code class="xref py py-func docutils literal notranslate"><span class="pre">public_fn_with_sphinxy_docstring()</span></code>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>An example of intersphinx is this: you <strong>cannot</strong> use <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> on this class.</p>
-</div>
+<p>This class allows to create a set of items to be used later with the 
+classes FocalSet and Lattice.</p>
 <dl class="py method">
 <dt id="dempster_shafer.FrameOfDiscernment.__init__">
 <code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FrameOfDiscernment.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Crate a FrameOfDiscernment for a set of items given as paramenter</p>
+<dd><p>Crate a FrameOfDiscernment object for the set of items that is given 
+as paramenter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>items</strong> (<em>list</em><em>, </em><em>np.array</em>) – List containing the strings with the names of the items
-represented in the frame of discernment</p>
+represented in the frame of discernment.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -160,48 +158,58 @@ associated integer index.</p>
 <p>The initialization can be done either using the literal names of the items or
 the indexes of the subset.</p>
 <p>For example, given the focal set of items {a,b,c,d} which was initiallize as:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fod</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">FrameOfDiscernment</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">])</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fod</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">FrameOfDiscernment</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>To create the focal set of elements {C, BC, AD}:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fs1</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">FocalSet</span><span class="p">(</span><span class="n">fod1</span><span class="p">,</span>
+<p>To create the focal set of elements {C, BC, AD} with basic probability assignments of 0.5, 0.4 and 0.1
+it is necessary to execute::</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fs1</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">FocalSet</span><span class="p">(</span><span class="n">fod</span><span class="p">,</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>Another option is to use a dictionary:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fs1</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">FocalSet</span><span class="p">(</span><span class="n">fod</span><span class="p">,</span>
    <span class="p">{</span>
-      <span class="s2">&quot;abc&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
-      <span class="s2">&quot;abdc&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
-      <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">0.3</span>
+      <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+      <span class="s2">&quot;bc&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+      <span class="s2">&quot;ad&quot;</span><span class="p">:</span> <span class="mf">0.1</span>
    <span class="p">})</span>
 </pre></div>
 </div>
-<dl class="py class">
-<dt id="dempster_shafer.FocalSet">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dempster_shafer.</span></code><code class="sig-name descname"><span class="pre">FocalSet</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpa</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FocalSet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class for representing the focal sets associated to a Frame of Discerment</p>
-<dl class="py method">
-<dt id="dempster_shafer.FocalSet.__checkSubsets">
-<code class="sig-name descname"><span class="pre">__checkSubsets</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FocalSet.__checkSubsets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check that all the subsets belong to the FrameOfDiscernment</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="dempster_shafer.FocalSet.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpa</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.FocalSet.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Focal set class</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fod</strong> (<a class="reference internal" href="#dempster_shafer.FrameOfDiscernment" title="dempster_shafer.FrameOfDiscernment"><em>FrameOfDiscernment</em></a>) – FrameOfDiscernment for which the focal set is defined</p></li>
-<li><p><strong>bpa</strong> (<em>dict</em>) – dictionary associating subset</p></li>
-</ul>
+<p>This can be also done using indexes for the dictionary:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">autoclass</span><span class="p">::</span> <span class="n">FocalSet</span>
+</pre></div>
+</div>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">members</dt>
+<dd class="field-odd"><p>__init__, __checkSubsets,</p>
 </dd>
 </dl>
-</dd></dl>
-
-</dd></dl>
-
+</div></blockquote>
 </div>
 <div class="section" id="lattice">
 <h1>Lattice<a class="headerlink" href="#lattice" title="Permalink to this headline">¶</a></h1>
-<p>Allows operation over the frame of discernment</p>
+<p>The lattice objects allow operations over a frame of discernment. Each Lattice
+must have associated the frame of discernment for which the computations are done.</p>
+<p>In order to compute the belief and plausibility, it is necessary to associate
+a focal set to the lattice.</p>
+<p>An example of workflow could be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">dempster_shafer</span> <span class="k">as</span> <span class="nn">ds</span>
+
+<span class="c1"># Create a frame of discernment</span>
+<span class="n">fod</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">FrameOfDiscernment</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">])</span>
+
+<span class="c1"># Focal elements and their associated basic probability assignment</span>
+<span class="n">elems</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;bc&#39;</span><span class="p">,</span> <span class="s1">&#39;ad&#39;</span><span class="p">])</span>
+<span class="n">bpas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">.5</span><span class="p">,</span> <span class="mf">.4</span><span class="p">,</span> <span class="mf">.1</span><span class="p">])</span>
+<span class="c1"># Initialize the focal set</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">FocalSet</span><span class="p">(</span><span class="n">fod</span><span class="p">,</span> <span class="n">bpas</span><span class="p">,</span> <span class="n">elemes</span><span class="p">)</span>
+
+<span class="c1"># Lattice to perform operations</span>
+<span class="n">lat</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Lattice</span><span class="p">(</span><span class="n">fod</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="py class">
 <dt id="dempster_shafer.Lattice">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dempster_shafer.</span></code><code class="sig-name descname"><span class="pre">Lattice</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dempster_shafer.Lattice" title="Permalink to this definition">¶</a></dt>

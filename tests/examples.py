@@ -2,18 +2,15 @@
 import dempster_shafer as ds
 import numpy as np
 
-fes = np.array(['c', 'bc', 'ad', 'c'])
+fes = np.array(['c', 'bc', 'ad'])
 bpas = np.array([.5, .4, .1])
-res = dict(zip(fes, bpas))
-print(res)
-c = np.unique(fes, return_counts=True)[1]
-dup = np.any(c > 1)
-print(dup)
 
-# # Create a Frame of Discerment for the items a, b, c, d using a list
-# fod1 = ds.FrameOfDiscernment(['a', 'b', 'c', 'd'])
-# print(fod1.get_index('ad'))
-# #fod1.print_all()
+# Create a Frame of Discerment for the items a, b, c, d using a list
+fod1 = ds.FrameOfDiscernment(['a', 'b', 'c', 'd'])
+print(fod1.get_index('c'))
+print(fod1.get_index('bc'))
+print(fod1.get_index('ad'))
+# fod1.print_all()
 # fs1 = ds.FocalSet(fod1, 
 #     {
 #         "abc": 0.4,
@@ -24,8 +21,15 @@ print(dup)
 # print(fod1.is_subset('abd'))
 # print(fod1.is_subset('aed'))
 
-# lat = ds.Lattice(fod1, fs1)
-# lat.bel()
+fs1 = ds.FocalSet(fod1, bpas, fes)
+print(fs1)
+
+fes_num = np.array([2, 6, 9])
+fs2 = ds.FocalSet(fod1, bpas, fes_num)
+print(fs2)
+
+lat = ds.Lattice(fod1, fs2)
+lat.bel()
 
 # # fod2 = ds.FrameOfDiscernment(['a', 'b', 'c', 'd', 'e', 'f'])
 # # fod2.print_all()

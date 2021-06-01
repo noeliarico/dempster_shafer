@@ -69,8 +69,6 @@ Documentation for the Code
 .. automodule:: dempster_shafer
 
 
-
-
 Frame Of Discernment
 ====================
 
@@ -87,26 +85,55 @@ the indexes of the subset.
 
 For example, given the focal set of items {a,b,c,d} which was initiallize as:
 
->>> fod = ds.FrameOfDiscernment(['a', 'b', 'c', 'd'])
+>>> fod = ds.FrameOfDiscernment(["a", "b", "c", "d"])
 
-To create the focal set of elements {C, BC, AD}::
+To create the focal set of elements {C, BC, AD} with basic probability assignments of 0.5, 0.4 and 0.1
+it is necessary to execute:::
 
-   fs1 = ds.FocalSet(fod1, 
+   fs1 = ds.FocalSet(fod, )
+
+Another option is to use a dictionary::
+
+   fs1 = ds.FocalSet(fod, 
       {
-         "abc": 0.4,
-         "abdc": 0.3,
-         "a": 0.3
+         "c": 0.5,
+         "bc": 0.4,
+         "ad": 0.1
       })
+
+This can be also done using indexes for the dictionary::
+
+
 
 .. autoclass:: FocalSet
    :members: __init__, __checkSubsets, 
 
 
-
 Lattice
 =======
 
-Allows operation over the frame of discernment
+The lattice objects allow operations over a frame of discernment. Each Lattice
+must have associated the frame of discernment for which the computations are done.
+
+In order to compute the belief and plausibility, it is necessary to associate 
+a focal set to the lattice.
+
+An example of workflow could be::
+
+   import numpy as np
+   import dempster_shafer as ds
+   
+   # Create a frame of discernment
+   fod = ds.FrameOfDiscernment(['a', 'b', 'c', 'd'])
+
+   # Focal elements and their associated basic probability assignment
+   elems = np.array(['c', 'bc', 'ad'])
+   bpas = np.array([.5, .4, .1])
+   # Initialize the focal set
+   fs = ds.FocalSet(fod, bpas, elemes)
+
+   # Lattice to perform operations
+   lat = ds.Lattice(fod, fs)
 
 .. autoclass:: Lattice
    :members: __init__, bel, pl

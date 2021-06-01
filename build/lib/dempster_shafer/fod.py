@@ -31,6 +31,7 @@ class FrameOfDiscernment:
         """
         
         self.items = items
+        self.n = len(items)
         
     def get_index(self, subset):
         """Get the index of a subset 
