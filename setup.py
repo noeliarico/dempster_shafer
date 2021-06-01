@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="dempster_shafer", # Replace with your own username
-    version="0.0.3",
+    version="0.0.10",
     author="Noelia Rico, Luigi Troiano",
     author_email="noeliarico@uniovi.es",
     description="Tools for Dempster-Shafer theory of evidence computation",

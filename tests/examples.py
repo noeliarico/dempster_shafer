@@ -29,7 +29,9 @@ fs2 = ds.FocalSet(fod1, bpas, fes_num)
 print(fs2)
 
 lat = ds.Lattice(fod1, fs2)
-lat.bel()
+#print(lat.bel())
+lat.b = np.array([0.,0.,0.5,0.5,0.,0.,0.9, 0.9, 0. , 0.1, 0.5, 0.6, 0.,0.1, 0.9, 1. ])
+print(lat.pl())
 
 # # fod2 = ds.FrameOfDiscernment(['a', 'b', 'c', 'd', 'e', 'f'])
 # # fod2.print_all()

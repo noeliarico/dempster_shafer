@@ -32,8 +32,6 @@ class FocalSet:
                 raise ValueError("There cannot be repeated focal elements.")
             
             # Check the distance of both is equal
-            print(len(bpa))
-            print(len(fe))
             if len(bpa) != len(fe):
                 raise ValueError("There must be exactly one bpa value to each focal element")
             
