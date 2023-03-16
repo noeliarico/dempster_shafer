@@ -1,3 +1,13 @@
+"""
+.. module:: Lattice
+    :platform: Unix, Windows
+    :synopsis: A useful module indeed.
+
+.. moduleauthor:: Noelia Rico <noeliarico@uniovi.es>
+
+
+"""
+
 import numpy as np
 from numba import cuda
 from numba import jit
@@ -6,6 +16,15 @@ from .fod import FrameOfDiscernment
 from .fs import FocalSet
     
 class Lattice:
+    
+    """Lattice class
+    """
+
+    # This is an array of 2**n positions to store the belief
+    b = None
+    # Updated when the focal set is modified in order to do the computation
+    # only when it is necessary
+    _new_fs = True
     
     def __init__(self, fod, fs = None):
         """Lattice
@@ -22,7 +41,7 @@ class Lattice:
         
         # Associate frame of discernment
         if isinstance(fod, (FrameOfDiscernment)):
-            self.fod = fod
+            self._fod = fod
         else:
             raise TypeError("fod must be a FrameOfDiscernment")
         
@@ -30,14 +49,12 @@ class Lattice:
         if isinstance(fs, (FocalSet)):
             # The focal set must refer to the same fod that the lattice
             if fs.fod is fod: 
-                self.fs = fs
+                self._fs = fs
             else:
                 raise ValueError('The focal set and this lattice must be associated with the same frame of discernment' )  
         else:
-            self.fs = None
+            self._fs = None
             
-        # This is an array to store the belief
-        self.b = None
     
     def add_focal_set(self, fs):
         """Associate a focal set with the latice
@@ -49,8 +66,9 @@ class Lattice:
         """
         if isinstance(fs, (FocalSet)):
             # The focal set must refer to the same fod that the lattice
-            if fs.fod is self.fod: 
-                self.fs = fs
+            if fs.fod is self._fod: 
+                self._fs = fs
+                self._new_fs = True
             else:
                 raise ValueError('The focal set and this lattice must be associated with the same frame of discernment.' )  
         else:
@@ -69,25 +87,30 @@ class Lattice:
         :rtype: np.array
         """
         
+        if not self._new_fs and isinstance(self.b, (np.ndarray)):
+            return self.b
+        
         # A focal set is required
-        if not isinstance(self.fs, (FocalSet)):
+        if not isinstance(self._fs, (FocalSet)):
             raise ValueError("A focal set must be added to the lattice before computing the belief.")
         
         if cuda.is_available():
-            if isinstance(self.b, (np.ndarray)):
+            if isinstance(self.b, (np.ndarray)) and not self._new_fs:
                 return self.b
             else:
                 # Initialize the array to store the belief of each subset
-                print(self.fod.n)
-                self.b = np.zeros(2**self.fod.n)
-                print(self.b.size)
+                # print(self._fod.n)
+                self.b = np.zeros(2**self._fod.n)
+                # print(self.b.size)
                 
                 # Define the dimensions of the parallelization
                 threadsperblock = 128 # TODO which one is the best to use?
                 blockspergrid = math.ceil(self.b.size / threadsperblock)
                 
                 # Get the focal set as two diffent arrays
-                elements, bpas = self.fs.as_arrays()
+                elements, bpas = self._fs.as_arrays()
+                # print(elements)
+                # print(bpas)
                 
                 # Copy to the GPU
                 d_elements = cuda.to_device(elements)
@@ -158,11 +181,11 @@ class Lattice:
                 return 1 - np.flip(self.b)
             else:
                 self.bel()
-                self.pl() # call recursively and go into isinstance
+                return 1 - np.flip(self.b) # call recursively and go into isinstance
 
         # Invalid format for the parameter element  
         else:
-            raise ValueError("Intance must be a list of indexes or a 'all'")
+            raise ValueError("Element must be a list of indexes or a 'all'")
 
             
         return(0)
@@ -175,62 +198,66 @@ class Lattice:
             the two focals sets given to this function
         :type fs: FocalSet
         """
-        
+        if not cuda.is_available():
+            raise ValueError("No GPU available.")
         if not isinstance(fs, (FocalSet)):
             raise ValueError("fs must be a FocalSet object.")
-        elif self.fs.fod != fs.fod: 
+        elif self._fs.fod != fs.fod: 
             raise ValueError("The focal sets must refer to the same frame of discernment.")
         else:
-            fs1, bpa1 = self.fs.fod.as_arrays()
-            fs2, bpa2 = fs.fod.as_arrays()
-            self.__combine(fs1, fs2, bpa1, bpa2)
             
+            # Get both focal sets and their bpas as numpy arrays
+            fs1, bpa1 = self._fs.as_arrays()
+            fs2, bpa2 = fs.as_arrays()
+            # self.__combine(fs1, fs2, bpa1, bpa2)
+            
+            # Maximum number of new focal elements obtained
             k = np.zeros(1, dtype=np.float32)
 
             # To store the results
             fs_out = np.zeros((fs1.size,fs2.size))
             bpa_out = np.zeros((fs1.size,fs2.size))
-            bpa_final = np.zeros(2**self.fod.n)
+            bpa_final = np.zeros(2**self._fod.n)
 
             # Move the set of focal elements and bpa to the GPU
             d_fs1 = cuda.to_device(fs1)
             d_fs2 = cuda.to_device(fs2)
             d_bpa1 = cuda.to_device(bpa1)
             d_bpa2 = cuda.to_device(bpa2)
-            d_k = cuda.to_device(k)
+            # For storing the final results
             d_fs_out = cuda.to_device(fs_out)
             d_bpa_out = cuda.to_device(bpa_out)
             d_bpa_final = cuda.to_device(bpa_final)
 
-            # Is it better to move it or to allocate it in memory?
+            # TODO: Is it better to move it or to allocate it in memory?
             # Allocate memory to store the results of belief and plausibility
             # d_fs_out = cuda.device_array((fs1.size,fs2.size), dtype=np.float32)
 
-            threadsperblock = (16, 16)
+            threadsperblock = (16, 16) # TODO define
             blockspergrid_x = math.ceil(fs_out.shape[0] / threadsperblock[0])
             blockspergrid_y = math.ceil(fs_out.shape[1] / threadsperblock[1])
             blockspergrid = (blockspergrid_x, blockspergrid_y)
-            self.__combine1[blockspergrid, threadsperblock](d_fs1, d_fs2, d_bpa1, d_bpa2, d_fs_out, d_bpa_out, d_bpa_final, d_k)
-            # cuda.synchronize()
+            self.__combine[blockspergrid, threadsperblock](d_fs1, d_fs2, d_bpa1, d_bpa2, d_fs_out, d_bpa_out, d_bpa_final)
+            # cuda.synchronize() # it's implicit
 
-            # Copy back to the gpu
-            fs_out = d_fs_out.copy_to_host()
-            bpa_out = d_bpa_out.copy_to_host()
-            k = d_k.copy_to_host()
-            
-            
+            # Copy back to the cpu
             bpa_final = d_bpa_final.copy_to_host()
 
-            # final result needs to be divided
-            print("Results after division")
-            print(np.divide(bpa_final, 1-k))
+            # Get the new focal elements
+            fs = np.nonzero(bpa_final)[0]
             
-            # Create a focal set
-            comb_fs = FocalSet(self.fod, bpa_final, fs_out)
+            # Check the focal elements of the new set that are not zero
+            # print("Focal set: {}".format(fs))
+            # print("Probability: {}".format(bpa_final[fs]))
+            
+            # Create a new focal set object using this
+            comb_fs = FocalSet(self._fod, bpa_final[fs], fs)
+            
+            return comb_fs
 
         
     @cuda.jit
-    def __combine(fs1, fs2, bpa1, bpa2, fs_out, bpa_out, bpa_final, k): 
+    def __combine(fs1, fs2, bpa1, bpa2, fs_out, bpa_out, bpa_final): 
 
     # fs1 and fs2 are two sets of focal elements
     # bpa1 and bpa2 their corresponding basic probability assignments
@@ -241,20 +268,26 @@ class Lattice:
         if i < fs_out.shape[0] and j < fs_out.shape[1]:
             fs_out[i,j] = fs1[i] & fs2[j] # intersection of the focal elements
             bpa_out[i,j] = bpa1[i] * bpa2[j]
+            # Calculate this value to use later in the denominator
             if fs_out[i,j] == 0:
                 cuda.atomic.add(bpa_final, 0, bpa_out[i,j])
 
-        # at this point each element of the matrix has a focal element obtained from 
-        # the intersection of two different focal elements of the two sets
+        # at this point each element of the matrix has a focal element obtained 
+        # from the intersection of two different focal elements of the two sets
 
-        # synchornize the threads
+        # synchornize the threads to ensure that the value of the bpa for the
+        # empty set has been computed
         cuda.syncthreads()
 
-        # summatory of the bpas of the focal elements which intersection result in the empty set
-        # can this be done or results in oncurrency problem?
+        # summatory of the bpas of the focal elements 
         if (i < fs_out.shape[0] and j < fs_out.shape[1]):
-            if fs_out[i,j] != 0:
-                cuda.atomic.add(bpa_final, fs_out[i,j], bpa_out[i,j]/(1-bpa_final[0]))
+            if fs_out[i,j] != 0: # this is the empty set, already known
+                cuda.atomic.add(bpa_final, fs_out[i,j], 
+                                bpa_out[i,j]/(1-bpa_final[0]))
 
-    def __str__(self):
-        return "Lattice for the frame of discerment".format(self.lattice.items)
+    def __str__(self, see_subsets = False):
+        if not see_subsets:
+            return "Lattice for the frame of discerment".format(self.lattice.items)
+        else:
+            # Translate the keys
+            return "Lattice for the frame of discerment".format(self.lattice.items)

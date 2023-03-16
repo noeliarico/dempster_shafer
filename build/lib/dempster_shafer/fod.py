@@ -1,5 +1,5 @@
 """
-.. module:: fod
+.. module:: FrameOfDiscernment
     :platform: Unix, Windows
     :synopsis: A useful module indeed.
 
@@ -10,13 +10,11 @@
 
 import numpy as np
 
-class FrameOfDiscernment:
-    """Frame of discernment for a set of items.
+class FrameOfDiscernment:   
     
+    """Frame of discernment for a set of items. 
     This class allows to create a set of items to be used later with the 
-    classes FocalSet and Lattice.
-    
-    """
+    classes FocalSet and Lattice."""
     
     # if True, all the strings for identifying the elements have length=1       
     __length1 = True
@@ -27,34 +25,71 @@ class FrameOfDiscernment:
 
         :param items: List containing the strings with the names of the items
             represented in the frame of discernment.
-        :type items: list, np.array
+        :type items: list, np.ndarray
+        
+        :raises TypeError: The items of the frame of discernment must be identified uniquely.
+        :raises ValueError: The items must be identified uniquely, otherwise a ValueError is raised.
+        
+        >>> fod = ds.FrameOfDiscernment(["a", "b", "c", "d"])
+        >>> fod
+        Frame of discernment for the set of items: ['a', 'b', 'c', 'd']
+        
+        The strings can also have longer length
+        
+        >>> fod = ds.FrameOfDiscernment(["item1", "item2", "item3"])
+        >>> fod
+        Frame of discernment for the set of items: ['item1', 'item2', 'item3']
+        
+        But it is necessary to ensure that they are not repeated, otherwise
+        an error will be shown:
+        
+        >>> fod = ds.FrameOfDiscernment(["a", "b", "a"])
+        >>> fod
+        ValueError: The items of the frame of discernment must be identified uniquely.
+        
         """
         
-        self.items = items
+        if not isinstance(items, (list, np.ndarray)):
+            raise TypeError("items must be of type 'list' or 'numpy.ndarray'")
+        
+        u = np.unique(items, return_counts=True)[1]
+        if np.any(u > 1):
+            raise ValueError("The items of the frame of discernment must be identified uniquely.")
+        
+        self.items = np.array(items)
         self.n = len(items)
         
-    def get_index(self, subset):
-        """Get the index of a subset 
-
-        Given an interger number as parameter, return the subset of the frame 
-        of discernment associated with that integer.
+        # TODO: Check all are strings. If they are check that none is empty
         
-        If the elements of the frame of discernmnet have length one...
+        
+    def get_index(self, subset):
+        """Given a subset of the frame of discernment, this function returns
+        its corresponding index in the lattice.
+        
+        :param subset: string representing a subset of the items.
+        :type subset: str
+        :raises ValueError: subset must be an string.
+        
+        If the elements of the frame of discernmnet have length one, then they
+        can be added one after another to represent the subset:
 
         >>> fod = ds.FrameOfDiscernment(['a', 'b', 'c', 'd'])
         >>> get_index('ad')
         9
         
-        If at least one of the elements of the frame of discernmnet have 
-        length greater one...
+        On the other hand, if at least one of the elements of the frame of 
+        discernmnet have length greater one, the items of the subset must be 
+        separated using ';' as shown below:
         
         >>> fod = ds.FrameOfDiscernment(['item1', 'item2', 'item3'])
         >>> get_index('item1;item2')
         
         """
         
-        if not type(subset) is str:
-            raise ValueError("ValueError: subset must be an string")
+        # print("Getting the index of the element {} with type {}".format(subset, type(subset)))
+        
+        if not isinstance(subset, (np.str_, str)):
+            raise ValueError("subset must be an string.")
         
         # check if all the elements of the subset are item of the FoD
         binary_repr = ''
@@ -71,11 +106,12 @@ class FrameOfDiscernment:
         # TODO: What happens is items have length greater than one?
         
     def get_subset(self, index):
-        """Returns the subset corresponding to an index  given as paramenter
+        """Returns the subset corresponding to an index of the lattice that is
+        given as paramenter. The index must be in the interval [0, 2^n].
 
-        :param index: Index of the subset that is going to be retrieved
+        :param index: Index of the subset that is going to be retrieved.
         :type index: int
-        :return: Subset corresponding to the index given as parameter
+        :return: Subset corresponding to the index given as parameter.
         :rtype: string
         """
             
@@ -97,6 +133,7 @@ class FrameOfDiscernment:
         :param subset: [description]
         :type subset: [type]
         """
+        #TODO there cannot be repeated items in the subset
         
         if self.__length1:
             # check for all the items if they exist
@@ -120,6 +157,8 @@ class FrameOfDiscernment:
         for i in range(2**len(self.items)):
             print("{} \t - \t {}".format(i, self.get_subset(i)))
     
-        
     def __str__(self):
-        return "Frame of discernment for the set of items".format(self.items)
+        return "Frame of discernment for the set of items: {}".format(self.items)
+    
+    def __repr__(self):
+        return "Frame of discernment for the set of items: {}".format(self.items)

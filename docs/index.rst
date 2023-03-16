@@ -3,23 +3,34 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Dempster_shafer's package documentation
+:code:`dempster-shafer`
 ===========================================
 
-The aim of this package is to provide a tool for performing Dempster-Shafer
-operations in large set of items by means of a native GPU implementation
+Quick start
+*************
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+The aim of this package is to provide tools for performing operations related
+with the Dempster-Shafer theory in large set of items using a native 
+GPU implementation to speed the execution.
 
-items - elements in omega
+>>> pip install dempster_shafer
+
+Source code of the package is available at: 
+
+|:package:| http://github.com/noeliarico/dempster_shafer
+
+Once downloaded, the package can be imported by 
+
+>>> import dempster_shafer as ds
+
+Dempster-shafer theory
+**********************
 
 The Dempster-Shafer theory of evidence provides an expressive framework for reasoning with uncertainty.  
 
 It includes probability theory as a special case and is able to express imprecise probabilities. 
 
-Given a \textit{frame of discernment} :math:`\Omega`, which is a set containing :math:`n` elements, 
+Given a *frame of discernment* :math:`\Omega`, which is a set containing :math:`n` elements, 
 basic probabilities are allocated to its subsets, instead of being allocated to single elements (on the contrary to what happens in the case of probability theory). 
 The derived measures of Plausibility and Belief, which determine the probability interval assigned to a subset, 
 are calculated from the relationships between that subset and the basic assignment of probabilities on all subsets. 
@@ -34,10 +45,9 @@ and plausibility refers to the degree of belief to which a set is feasible.
 A function :math:`m:2^{\Omega}\longrightarrow [0, 1]` over :math:`\Omega` is called a *basic probability assignment* iff
 :math:`m(\emptyset)=0 \;\;\; \textrm{and} \:\; \sum_{S \in 2^\Omega} m(S)=1`
 
-Any :math:`S \in 2^\Omega$ is a \textit{focal element} iff $m(S)>0`. 
+Any :math:`S \in 2^\Omega` is a *focal element* iff :math:`m(S)>0`. 
 
 A *focal set* is the collection of focal elements :math:`F(\Omega)=\{S \subseteq \Omega | m(S)>0\} \subseteq 2^\Omega`.
-
 
 The *Belief* of :math:`A \subseteq \Omega` induced by the basic probability assignment function :math:`m` is defined as
 
@@ -48,69 +58,90 @@ The *Plausibility* of :math:`A \subseteq \Omega` induced by the basic probabilit
 :math:`Pl(A)=\sum_{S \cap A \neq \emptyset} m(S)`
 
 
-Let :math:`m_1` and :math:`m_2$` be two basic probability assignments, the *joint basic probability assignment*, i.e. the Dempster's combination rule (DCR), is computed as
+Let :math:`m_1` and :math:`m_2` be two basic probability assignments, the *joint basic probability assignment*, i.e. the Dempster's combination rule (DCR), is computed as
 :math:`m_{1,2}(A) = \frac{1}{1-Z} \sum\limits_{B \cap C = A} m_1(B) \cdot m_2(C)`
 where
 :math:`Z = \sum\limits_{B \cap C = \emptyset} m_1(B) \cdot m_2(C)`
 is a measure of *conflict* between the two basic probability assignment sets. In addition, it is assumed :math:`m_{1,2}(\emptyset) = 0`.
 
 
-Indices and tables
-==================
+How to use the package
+===========================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+The `dempster_shafer` provides three different classes:
 
-
-Documentation for the Code
-**************************
-
-.. automodule:: dempster_shafer
-
+- :code:`FrameOfDiscernment`: Basic object necessary for defining later 
+   focal sets and lattices.
+- :code:`FocalSet`: Dictionary of elements and their basic probability assignments
+   related to a frame of discernment.
+- :code:`Lattice`: has the method to compute belief, plausability and new
+   focal set obtained after combining different focal sets.
 
 Frame Of Discernment
-====================
+********************
 
-.. autoclass:: FrameOfDiscernment
-   :members: __init__, is_subset, get_index, get_subset, print_all
+.. autoclass:: dempster_shafer.FrameOfDiscernment
+   :members: __init__, 
+               get_index,
+               get_subset, 
+               print_all
 
 Focal Set
-=========
+*********
 
-The set of focal sets must be associated with a Frame of Discernment.
+The set of focal elements must be associated with a Frame of Discernment. 
+Therefore, all the elements in the focal set must be a subset of the items 
+defined in the object :code:`FrameOfDiscernment` associated with the Focal Set.
 
 The initialization can be done either using the literal names of the items or 
 the indexes of the subset.
 
-For example, given the focal set of items {a,b,c,d} which was initiallize as:
+For example, given the focal set of items {a,b,c,d} which was initiallize as::
 
->>> fod = ds.FrameOfDiscernment(["a", "b", "c", "d"])
+   fod = ds.FrameOfDiscernment(["a", "b", "c", "d"])
 
 To create the focal set of elements {C, BC, AD} with basic probability assignments of 0.5, 0.4 and 0.1
 it is necessary to execute:::
 
-   fs1 = ds.FocalSet(fod, )
+   >>> fes = np.array(['c', 'bc', 'ad'])
+   >>> bpas = np.array([.5, .4, .1])
+   >>> fs1 = ds.FocalSet(fod, bpas, fes)
+   Items ['a' 'b' 'c' 'd'] 
+   Focal set {'c': 0.5, 'bc': 0.4, 'ad': 0.1} 
 
-Another option is to use a dictionary::
+The items are internally stored as a :code:`dict` object. Another option is to 
+use a dictionary directly in order to initiallize::
 
-   fs1 = ds.FocalSet(fod, 
+   >>> fs2 = ds.FocalSet(fod, 
       {
          "c": 0.5,
          "bc": 0.4,
          "ad": 0.1
       })
 
-This can be also done using indexes for the dictionary::
+In any case, if it is necessary to retrieve the elements and basic probability
+assignments later as arrays this can be done with::
 
+   >>> fes, bpas = fs2.as_arrays()
+   >>> print(fes)
+   ['c' 'bc' 'ad']
+   >>> print(bpas)
+   [0.5 0.4 0.1]
 
+Any of these initializations can also be done using indexes for the dictionary::
 
-.. autoclass:: FocalSet
-   :members: __init__, __checkSubsets, 
+   fs1 = ds.FocalSet(fod, 
+      {
+         2: 0.5,
+         6: 0.4,
+         9: 0.1
+      })
 
+.. autoclass:: dempster_shafer.FocalSet
+   :members: __init__
 
 Lattice
-=======
+*******
 
 The lattice objects allow operations over a frame of discernment. Each Lattice
 must have associated the frame of discernment for which the computations are done.
@@ -135,5 +166,25 @@ An example of workflow could be::
    # Lattice to perform operations
    lat = ds.Lattice(fod, fs)
 
-.. autoclass:: Lattice
+.. autoclass:: dempster_shafer.Lattice
    :members: __init__, bel, pl
+
+
+Details for developers about the implementation
+===============================================
+
+FrameOfDiscernment
+******************
+
+Whenever an object of type FrameOfDiscernment is initiallized, an ndarray 
+object containing items containing the set is created. 
+This is done only after ensuring that the names of the items are unique, 
+as it cannot be two items with the same name in the set.
+
+If the names of the items have length one, then the subset can be referred 
+without separator. This is controlled by an internatl class attribute called _length1.
+
+FocalSet
+********
+
+When an object of this class is created, self.bpas = dict(zip(fe, bpa)) is initiallized after some checkings.
